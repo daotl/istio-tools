@@ -149,9 +149,16 @@ func (g *htmlGenerator) generatePerPackageOutput(filesToGen map[*protomodel.File
 
 func (g *htmlGenerator) generateOutput(filesToGen map[*protomodel.FileDescriptor]bool) (*plugin.CodeGeneratorResponse, error) {
 	// process each package; we produce one output file per package
-	supported := uint64(plugin.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
+	supported := uint64(plugin.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL | plugin.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+
+	// Set supported edition range (from PROTO3 equivalent to latest known edition)
+	minimumEdition := int32(descriptor.Edition_EDITION_PROTO3)
+	maximumEdition := int32(descriptor.Edition_EDITION_2024)
+
 	response := plugin.CodeGeneratorResponse{
 		SupportedFeatures: &supported,
+		MinimumEdition:    &minimumEdition,
+		MaximumEdition:    &maximumEdition,
 	}
 
 	for _, pkg := range g.model.Packages {
@@ -447,6 +454,12 @@ func (g *htmlGenerator) generateFileHeader(top *protomodel.FileDescriptor, numEn
 		}
 
 		g.emit("number_of_entries: ", strconv.Itoa(numEntries))
+
+		// Add edition information to front-matter
+		if top != nil && top.UsesEditions() {
+			g.emit("protobuf_edition: ", top.GetEditionString())
+		}
+
 		g.emit("---")
 	} else if g.mode == htmlPage {
 		g.emit("<!DOCTYPE html>")

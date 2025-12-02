@@ -15,7 +15,7 @@
 package protomodel
 
 import (
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	descriptor "google.golang.org/protobuf/types/descriptorpb"
 )
 
 type FileDescriptor struct {
@@ -92,4 +92,19 @@ func (f *FileDescriptor) aggregateMessages(messages []*MessageDescriptor) {
 
 func (f *FileDescriptor) aggregateEnums(enums []*EnumDescriptor) {
 	f.AllEnums = append(f.AllEnums, enums...)
+}
+
+// GetEditionString returns a string representation of the file's edition/syntax
+func (f *FileDescriptor) GetEditionString() string {
+	return GetEditionString(f.FileDescriptorProto)
+}
+
+// IsEdition2023OrLater returns true if the file uses edition 2023 or later
+func (f *FileDescriptor) IsEdition2023OrLater() bool {
+	return IsEdition2023OrLater(f.FileDescriptorProto)
+}
+
+// UsesEditions returns true if the file uses the editions system
+func (f *FileDescriptor) UsesEditions() bool {
+	return UsesEditions(f.FileDescriptorProto)
 }

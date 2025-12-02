@@ -19,7 +19,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	descriptor "google.golang.org/protobuf/types/descriptorpb"
 )
 
 // PackageDescriptor describes a package, which is a composition of proto files.

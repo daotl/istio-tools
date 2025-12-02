@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	plugin "google.golang.org/protobuf/types/pluginpb"
 
 	"github.com/daotl/istio-tools/cmd/protoc-gen-crd/pkg/protocgen"
 	"github.com/daotl/istio-tools/pkg/protomodel"

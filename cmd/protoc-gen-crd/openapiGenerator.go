@@ -23,13 +23,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	plugin "google.golang.org/protobuf/types/pluginpb"
 	"github.com/howardjohn/celpp"
 	"github.com/howardjohn/celpp/macros"
 	"golang.org/x/exp/maps"
 	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/proto"
+	descriptor "google.golang.org/protobuf/types/descriptorpb"
 	apiextinternal "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions"
 	apiext "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	structuralschema "k8s.io/apiextensions-apiserver/pkg/apiserver/schema"
@@ -167,7 +167,18 @@ func buildCustomSchemasByMessageName() map[string]*apiext.JSONSchemaProps {
 }
 
 func (g *openapiGenerator) generateOutput(filesToGen map[*protomodel.FileDescriptor]bool) (*plugin.CodeGeneratorResponse, error) {
-	response := plugin.CodeGeneratorResponse{}
+	// Declare support for editions
+	supported := uint64(plugin.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+
+	// Set supported edition range (from PROTO3 equivalent to latest known edition)
+	minimumEdition := int32(descriptor.Edition_EDITION_PROTO3)
+	maximumEdition := int32(descriptor.Edition_EDITION_2024)
+
+	response := plugin.CodeGeneratorResponse{
+		SupportedFeatures: &supported,
+		MinimumEdition:    &minimumEdition,
+		MaximumEdition:    &maximumEdition,
+	}
 
 	g.generateSingleFileOutput(filesToGen, &response)
 
@@ -767,13 +778,15 @@ func (g *openapiGenerator) fieldType(field *protomodel.FieldDescriptor) *apiext.
 		schema.Description = g.generateDescription(field)
 
 	case descriptor.FieldDescriptorProto_TYPE_INT32,
-		descriptor.FieldDescriptorProto_TYPE_SINT32, descriptor.FieldDescriptorProto_TYPE_SFIXED32:
+		descriptor.FieldDescriptorProto_TYPE_SINT32,
+		descriptor.FieldDescriptorProto_TYPE_SFIXED32:
 		schema.Type = "integer"
 		schema.Format = "int32"
 		schema.Description = g.generateDescription(field)
 
 	case descriptor.FieldDescriptorProto_TYPE_INT64,
-		descriptor.FieldDescriptorProto_TYPE_SINT64, descriptor.FieldDescriptorProto_TYPE_SFIXED64:
+		descriptor.FieldDescriptorProto_TYPE_SINT64,
+		descriptor.FieldDescriptorProto_TYPE_SFIXED64:
 		schema.Type = "integer"
 		schema.Format = "int64"
 		// TODO: ideally we could use a string here to avoid https://github.com/istio/api/issues/2818

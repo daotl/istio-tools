@@ -19,7 +19,7 @@ import (
 	"io"
 	"os"
 
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	plugin "google.golang.org/protobuf/types/pluginpb"
 	"google.golang.org/protobuf/proto"
 )
 

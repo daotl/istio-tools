@@ -17,8 +17,8 @@ package protomodel
 import (
 	"strings"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	descriptor "google.golang.org/protobuf/types/descriptorpb"
+	plugin "google.golang.org/protobuf/types/pluginpb"
 )
 
 // model represents a resolved in-memory version of all the input protos
@@ -175,4 +175,31 @@ func resolveDependencies(file *FileDescriptor, filesByName map[string]*FileDescr
 // DottedName returns a dotted representation of the coreDesc's name
 func DottedName(o CoreDesc) string {
 	return strings.Join(o.QualifiedName(), ".")
+}
+
+// GetEditionString returns a string representation of the protobuf edition
+func GetEditionString(desc *descriptor.FileDescriptorProto) string {
+	// If edition is specified, use it
+	if edition := desc.GetEdition(); edition != descriptor.Edition_EDITION_UNKNOWN {
+		return edition.String()
+	}
+
+	// Fall back to syntax for proto2/proto3
+	if syntax := desc.GetSyntax(); syntax != "" {
+		return syntax
+	}
+
+	// Default to proto3 for compatibility
+	return "proto3"
+}
+
+// IsEdition2023OrLater returns true if the file uses edition 2023 or later
+func IsEdition2023OrLater(desc *descriptor.FileDescriptorProto) bool {
+	edition := desc.GetEdition()
+	return edition >= descriptor.Edition_EDITION_2023
+}
+
+// UsesEditions returns true if the file uses the editions system (not proto2/proto3 syntax)
+func UsesEditions(desc *descriptor.FileDescriptorProto) bool {
+	return desc.GetSyntax() == "editions" || desc.GetEdition() != descriptor.Edition_EDITION_UNKNOWN
 }

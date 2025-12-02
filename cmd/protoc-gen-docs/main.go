@@ -21,7 +21,7 @@ import (
 	"strings"
 
 	"github.com/client9/gospell"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	plugin "google.golang.org/protobuf/types/pluginpb"
 
 	"github.com/daotl/istio-tools/pkg/protocgen"
 	"github.com/daotl/istio-tools/pkg/protomodel"

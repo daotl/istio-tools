@@ -17,7 +17,7 @@ package protomodel
 import (
 	"strings"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	descriptor "google.golang.org/protobuf/types/descriptorpb"
 )
 
 // CoreDesc is an interface abstracting the abilities shared by all descriptors
