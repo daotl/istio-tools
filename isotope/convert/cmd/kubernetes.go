@@ -22,8 +22,8 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"istio.io/tools/isotope/convert/pkg/graph"
-	"istio.io/tools/isotope/convert/pkg/kubernetes"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/kubernetes"
 )
 
 // kubernetesCmd represents the kubernetes command
@@ -49,7 +49,8 @@ var kubernetesCmd = &cobra.Command{
 		serviceImage, err := cmd.PersistentFlags().GetString("service-image")
 		exitIfError(err)
 
-		serviceMaxIdleConnectionsPerHost, err := cmd.PersistentFlags().GetInt("service-max-idle-connections-per-host")
+		serviceMaxIdleConnectionsPerHost, err :=
+			cmd.PersistentFlags().GetInt("service-max-idle-connections-per-host")
 		exitIfError(err)
 
 		clientImage, err := cmd.PersistentFlags().GetString("client-image")
@@ -75,7 +76,8 @@ var kubernetesCmd = &cobra.Command{
 
 		manifests, err := kubernetes.ServiceGraphToKubernetesManifests(
 			serviceGraph, serviceNodeSelector, serviceImage,
-			serviceMaxIdleConnectionsPerHost, clientNodeSelector, clientImage, clientNamespace, environmentName, clusterName, clientDisabled)
+			serviceMaxIdleConnectionsPerHost, clientNodeSelector, clientImage, clientNamespace,
+			environmentName, clusterName, clientDisabled)
 		exitIfError(err)
 
 		fmt.Println(string(manifests))

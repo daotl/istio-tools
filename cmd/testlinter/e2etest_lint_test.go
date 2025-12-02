@@ -18,8 +18,8 @@ import (
 	"reflect"
 	"testing"
 
-	"istio.io/tools/cmd/testlinter/rules"
-	"istio.io/tools/pkg/checker"
+	"github.com/daotl/istio-tools/cmd/testlinter/rules"
+	"github.com/daotl/istio-tools/pkg/checker"
 )
 
 func TestE2eTestSkipByIssueRule(t *testing.T) {

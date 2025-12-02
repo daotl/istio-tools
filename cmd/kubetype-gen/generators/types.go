@@ -23,7 +23,7 @@ import (
 	"k8s.io/gengo/namer"
 	"k8s.io/gengo/types"
 
-	"istio.io/tools/cmd/kubetype-gen/metadata"
+	"github.com/daotl/istio-tools/cmd/kubetype-gen/metadata"
 )
 
 type typesGenerator struct {
@@ -76,18 +76,33 @@ func (g *typesGenerator) GenerateType(c *generator.Context, t *types.Type, w io.
 	kubeTypes := g.source.KubeTypes(t)
 	sw := generator.NewSnippetWriter(w, c, "$", "$")
 	m := map[string]interface{}{
-		"KubeType":    nil,
-		"RawType":     t,
-		"TypeMeta":    c.Universe.Type(types.Name{Name: "TypeMeta", Package: "k8s.io/apimachinery/pkg/apis/meta/v1"}),
-		"ObjectMeta":  c.Universe.Type(types.Name{Name: "ObjectMeta", Package: "k8s.io/apimachinery/pkg/apis/meta/v1"}),
-		"ListMeta":    c.Universe.Type(types.Name{Name: "ListMeta", Package: "k8s.io/apimachinery/pkg/apis/meta/v1"}),
-		"IstioStatus": c.Universe.Type(types.Name{Name: "IstioStatus", Package: "istio.io/api/meta/v1alpha1"}),
+		"KubeType": nil,
+		"RawType":  t,
+		"TypeMeta": c.Universe.Type(types.Name{
+			Name:    "TypeMeta",
+			Package: "k8s.io/apimachinery/pkg/apis/meta/v1",
+		}),
+		"ObjectMeta": c.Universe.Type(types.Name{
+			Name:    "ObjectMeta",
+			Package: "k8s.io/apimachinery/pkg/apis/meta/v1",
+		}),
+		"ListMeta": c.Universe.Type(types.Name{
+			Name:    "ListMeta",
+			Package: "k8s.io/apimachinery/pkg/apis/meta/v1",
+		}),
+		"IstioStatus": c.Universe.Type(types.Name{
+			Name:    "IstioStatus",
+			Package: "istio.io/api/meta/v1alpha1",
+		}),
 	}
 	for _, kubeType := range kubeTypes {
 		localM := m
 		// name, package, found := typeFromComments(kubeType.RawType().CommentLines)
-		if name, packageName, found := statusOverrideFromComments(kubeType.RawType().CommentLines); found {
-			localM["IstioStatus"] = c.Universe.Type(types.Name{Name: name, Package: packageName})
+		if name, packageName, found := statusOverrideFromComments(
+			kubeType.RawType().CommentLines); found {
+			localM["IstioStatus"] = c.Universe.Type(types.Name{
+				Name: name, Package: packageName,
+			})
 		}
 
 		// make sure local types get imports generated for them to prevent reusing their local name for real imports,

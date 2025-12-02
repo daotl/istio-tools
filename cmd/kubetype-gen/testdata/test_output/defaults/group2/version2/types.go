@@ -19,8 +19,8 @@ package version2
 import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	defaults "github.com/daotl/istio-tools/cmd/kubetype-gen/testdata/test_input/positive/defaults"
 	v1alpha1 "istio.io/api/meta/v1alpha1"
-	defaults "istio.io/tools/cmd/kubetype-gen/testdata/test_input/positive/defaults"
 )
 
 //

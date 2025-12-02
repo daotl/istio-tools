@@ -23,10 +23,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/script"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svctype"
+	"github.com/daotl/istio-tools/isotope/service/pkg/srv/prometheus"
 	"istio.io/pkg/log"
-	"istio.io/tools/isotope/convert/pkg/graph/script"
-	"istio.io/tools/isotope/convert/pkg/graph/svctype"
-	"istio.io/tools/isotope/service/pkg/srv/prometheus"
 )
 
 func init() {
@@ -36,7 +36,8 @@ func init() {
 func execute(
 	step interface{},
 	forwardableHeader http.Header,
-	serviceTypes map[string]svctype.ServiceType) error {
+	serviceTypes map[string]svctype.ServiceType,
+) error {
 	switch cmd := step.(type) {
 	case script.SleepCommand:
 		executeSleepCommand(cmd)
@@ -118,7 +119,8 @@ func executeRequestCommand(
 func executeConcurrentCommand(
 	cmd script.ConcurrentCommand,
 	forwardableHeader http.Header,
-	serviceTypes map[string]svctype.ServiceType) error {
+	serviceTypes map[string]svctype.ServiceType,
+) error {
 	numSubCmds := len(cmd)
 	wg := sync.WaitGroup{}
 	wg.Add(numSubCmds)

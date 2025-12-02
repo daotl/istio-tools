@@ -24,9 +24,9 @@ import (
 
 	"istio.io/pkg/log"
 
-	"istio.io/tools/isotope/convert/pkg/consts"
-	"istio.io/tools/isotope/service/pkg/srv"
-	"istio.io/tools/isotope/service/pkg/srv/prometheus"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/consts"
+	"github.com/daotl/istio-tools/isotope/service/pkg/srv"
+	"github.com/daotl/istio-tools/isotope/service/pkg/srv/prometheus"
 )
 
 const (

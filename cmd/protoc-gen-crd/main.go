@@ -20,8 +20,8 @@ import (
 
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 
-	"istio.io/tools/cmd/protoc-gen-crd/pkg/protocgen"
-	"istio.io/tools/pkg/protomodel"
+	"github.com/daotl/istio-tools/cmd/protoc-gen-crd/pkg/protocgen"
+	"github.com/daotl/istio-tools/pkg/protomodel"
 )
 
 // Breaks the comma-separated list of key=value pairs

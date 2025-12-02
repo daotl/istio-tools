@@ -20,15 +20,16 @@ import (
 	"fmt"
 	"text/template"
 
-	"istio.io/tools/isotope/convert/pkg/graph"
-	"istio.io/tools/isotope/convert/pkg/graph/script"
-	"istio.io/tools/isotope/convert/pkg/graph/svc"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/script"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svc"
 )
 
 // ServiceGraphToDotLanguage converts a ServiceGraph to a Graphviz DOT language
 // string.
 func ServiceGraphToDotLanguage(
-	serviceGraph graph.ServiceGraph) (string, error) {
+	serviceGraph graph.ServiceGraph,
+) (string, error) {
 	graph, err := ServiceGraphToGraph(serviceGraph)
 	if err != nil {
 		return "", err
@@ -126,7 +127,8 @@ const graphvizTemplate = `digraph {
 `
 
 func getEdgesFromExe(
-	exe script.Command, idx int, fromServiceName string) (edges []Edge) {
+	exe script.Command, idx int, fromServiceName string,
+) (edges []Edge) {
 	switch cmd := exe.(type) {
 	case script.ConcurrentCommand:
 		for _, subCmd := range cmd {

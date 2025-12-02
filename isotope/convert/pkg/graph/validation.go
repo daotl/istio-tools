@@ -18,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 
-	"istio.io/tools/isotope/convert/pkg/graph/script"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/script"
 )
 
 // validate returns nil if g is valid.

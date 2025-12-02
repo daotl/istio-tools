@@ -24,7 +24,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/yaml"
 
-	"istio.io/tools/pkg/orggen/org"
+	"github.com/daotl/istio-tools/pkg/orggen/org"
 )
 
 type Organization struct {
@@ -120,7 +120,9 @@ func strPointer(s string) *string {
 
 func ConvertConfig(cfg Organization) org.FullConfig {
 	allMembers := cfg.Members
-	sort.Slice(allMembers, func(i, j int) bool { return strings.ToLower(allMembers[i]) < strings.ToLower(allMembers[j]) })
+	sort.Slice(allMembers, func(i, j int) bool {
+		return strings.ToLower(allMembers[i]) < strings.ToLower(allMembers[j])
+	})
 
 	// Insert the members team, which is handled separately
 	closed := org.Closed

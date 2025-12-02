@@ -18,7 +18,7 @@ import (
 	"go/ast"
 	"go/token"
 
-	"istio.io/tools/pkg/checker"
+	"github.com/daotl/istio-tools/pkg/checker"
 )
 
 // SkipIssue requires that a `t.Skip()` call in test function should contain url to a issue.
@@ -53,11 +53,15 @@ func (lr *SkipIssue) Check(aNode ast.Node, fs *token.FileSet, lrp *checker.Repor
 	if fn, isFn := aNode.(*ast.FuncDecl); isFn {
 		for _, bd := range fn.Body.List {
 			if ok, _ := matchFunc(bd, "t", "SkipNow"); ok {
-				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(), "Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
+				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(),
+					"Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
 			} else if ok, _ := matchFunc(bd, "t", "Skipf"); ok {
-				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(), "Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
-			} else if ok, fcall := matchFunc(bd, "t", "Skip"); ok && !matchFuncArgs(fcall, lr.skipArgsRegex) {
-				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(), "Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
+				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(),
+					"Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
+			} else if ok, fcall := matchFunc(bd, "t", "Skip"); ok &&
+				!matchFuncArgs(fcall, lr.skipArgsRegex) {
+				lrp.AddItem(fs.Position(bd.Pos()), lr.GetID(),
+					"Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue.")
 			}
 		}
 	}

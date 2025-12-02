@@ -21,7 +21,7 @@ import (
 	"os"
 	"os/exec"
 
-	"istio.io/tools/pkg/orggen"
+	"github.com/daotl/istio-tools/pkg/orggen"
 )
 
 var (

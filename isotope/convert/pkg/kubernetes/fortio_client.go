@@ -20,7 +20,7 @@ import (
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"istio.io/tools/isotope/convert/pkg/consts"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/consts"
 )
 
 var fortioClientLabels = map[string]string{"app": "client"}
@@ -28,7 +28,8 @@ var fortioClientLabels = map[string]string{"app": "client"}
 func makeFortioDeployment(
 	nodeSelector map[string]string,
 	clientImage string,
-	namespace string) (deployment appsv1.Deployment) {
+	namespace string,
+) (deployment appsv1.Deployment) {
 	deployment.APIVersion = "apps/v1"
 	deployment.Kind = "Deployment"
 	deployment.ObjectMeta.Name = "client"

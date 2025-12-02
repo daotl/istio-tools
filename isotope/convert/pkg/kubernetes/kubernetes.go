@@ -27,9 +27,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/yaml"
 
-	"istio.io/tools/isotope/convert/pkg/consts"
-	"istio.io/tools/isotope/convert/pkg/graph"
-	"istio.io/tools/isotope/convert/pkg/graph/svc"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/consts"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svc"
 )
 
 const (
@@ -60,7 +60,8 @@ func ServiceGraphToKubernetesManifests(
 	clientNamespace string,
 	environmentName string,
 	clusterName string,
-	clientDisabled bool) ([]byte, error) {
+	clientDisabled bool,
+) ([]byte, error) {
 	numServices := len(serviceGraph.Services)
 	numManifests := numManifestsPerService*numServices + numConfigMaps
 	manifests := make([]string, 0, numManifests)
@@ -83,7 +84,7 @@ func ServiceGraphToKubernetesManifests(
 
 	// Find all the namespaces with the given cluster
 	for _, service := range serviceGraph.Services {
-		var ommit = false
+		ommit := false
 		for _, x := range namespaces {
 			if x == service.Namespace {
 				ommit = true
@@ -104,7 +105,6 @@ func ServiceGraphToKubernetesManifests(
 			return nil, err
 		}
 	} else {
-
 		for _, namespace := range namespaces {
 			configMap, err := makeConfigMap(serviceGraph, namespace)
 			if err != nil {
@@ -165,7 +165,8 @@ func validateServices(clusterName string, services []svc.Service, manifest inter
 	if serviceToAppendCounter == 0 {
 		return nil, errors.New(fmt.Sprintf("No services found to match clusterName: '%s'", clusterName))
 	}
-	return append(header, []byte(fmt.Sprintf("## Number of services included in this manifest for cluster '%s' is: %d\n\n", clusterName, serviceToAppendCounter))...), nil
+	return append(header, []byte(fmt.Sprintf("## Number of services included in this manifest for cluster '%s' is: %d\n\n",
+		clusterName, serviceToAppendCounter))...), nil
 }
 
 func combineLabels(labels ...map[string]string) map[string]string {
@@ -177,7 +178,8 @@ func combineLabels(labels ...map[string]string) map[string]string {
 }
 
 func makeConfigMap(
-	graph graph.ServiceGraph, namespace string) (configMap apiv1.ConfigMap, err error) {
+	graph graph.ServiceGraph, namespace string,
+) (configMap apiv1.ConfigMap, err error) {
 	graphYAMLBytes, err := yaml.Marshal(graph)
 	if err != nil {
 		return
@@ -214,7 +216,8 @@ func makeService(service svc.Service) (k8sService apiv1.Service) {
 func makeDeployment(
 	service svc.Service, nodeSelector map[string]string,
 	serviceImage string, serviceMaxIdleConnectionsPerHost int) (
-	k8sDeployment appsv1.Deployment) {
+	k8sDeployment appsv1.Deployment,
+) {
 	k8sDeployment.APIVersion = "apps/v1"
 	k8sDeployment.Kind = "Deployment"
 	k8sDeployment.ObjectMeta.Name = service.Name

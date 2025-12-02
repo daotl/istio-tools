@@ -18,7 +18,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"istio.io/tools/isotope/convert/pkg/graph/size"
+
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/size"
 )
 
 // RequestCommand describes a command to send an HTTP request to another

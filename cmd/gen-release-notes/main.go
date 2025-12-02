@@ -30,8 +30,8 @@ import (
 
 	"sigs.k8s.io/yaml"
 
-	"istio.io/tools/pkg/markdown"
-	"istio.io/tools/pkg/schemavalidation"
+	"github.com/daotl/istio-tools/pkg/markdown"
+	"github.com/daotl/istio-tools/pkg/schemavalidation"
 )
 
 //go:embed release_notes_schema.json
@@ -117,7 +117,8 @@ func main() {
 		}
 
 		if _, err := os.Stat(filepath.Join(notesDir, releaseNotesDir)); os.IsNotExist(err) {
-			log.Printf("Could not find release notes directory -- %s does not exist.\n", filepath.Join(notesDir, releaseNotesDir))
+			log.Printf("Could not find release notes directory -- %s does not exist.\n",
+				filepath.Join(notesDir, releaseNotesDir))
 			os.Exit(2)
 		}
 
@@ -190,7 +191,8 @@ func checkReleaseNotesLabel(info PRInfo) error {
 		log.Printf("%d release notes found.\n", len(info.ReleaseNoteFiles))
 		return nil
 	}
-	newURL := fmt.Sprintf("https://github.com/%s/%s/new/%s/releasenotes/notes", info.Author, os.Getenv("PULL_HEAD_REF"), os.Getenv("PULL_BASE_REF"))
+	newURL := fmt.Sprintf("https://github.com/%s/%s/new/%s/releasenotes/notes", info.Author,
+		os.Getenv("PULL_HEAD_REF"), os.Getenv("PULL_BASE_REF"))
 	// nolint: lll
 	log.Printf(`
 ERROR: Missing release notes and missing %q label.

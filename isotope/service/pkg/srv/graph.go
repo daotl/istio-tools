@@ -23,10 +23,10 @@ import (
 
 	"istio.io/pkg/log"
 
-	"istio.io/tools/isotope/convert/pkg/graph"
-	"istio.io/tools/isotope/convert/pkg/graph/size"
-	"istio.io/tools/isotope/convert/pkg/graph/svc"
-	"istio.io/tools/isotope/convert/pkg/graph/svctype"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/size"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svc"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svctype"
 )
 
 // HandlerFromServiceGraphYAML makes a handler to emulate the service with name
@@ -80,7 +80,8 @@ func logService(service svc.Service) error {
 
 // serviceGraphFromYAMLFile unmarshals the ServiceGraph from the YAML at path.
 func serviceGraphFromYAMLFile(
-	path string) (serviceGraph graph.ServiceGraph, err error) {
+	path string,
+) (serviceGraph graph.ServiceGraph, err error) {
 	graphYAML, err := os.ReadFile(path)
 	if err != nil {
 		return
@@ -96,7 +97,8 @@ func serviceGraphFromYAMLFile(
 // extractService finds the service in serviceGraph with the specified name.
 func extractService(
 	serviceGraph graph.ServiceGraph, name string) (
-	service svc.Service, err error) {
+	service svc.Service, err error,
+) {
 	for _, svc := range serviceGraph.Services {
 		if svc.Name == name {
 			service = svc
@@ -111,7 +113,8 @@ func extractService(
 // extractServiceTypes builds a map from service name to its type
 // (i.e. HTTP or gRPC).
 func extractServiceTypes(
-	serviceGraph graph.ServiceGraph) map[string]svctype.ServiceType {
+	serviceGraph graph.ServiceGraph,
+) map[string]svctype.ServiceType {
 	types := make(map[string]svctype.ServiceType, len(serviceGraph.Services))
 	for _, service := range serviceGraph.Services {
 		types[service.Name] = service.Type

@@ -21,14 +21,15 @@ import (
 
 	"istio.io/pkg/log"
 
-	"istio.io/tools/isotope/convert/pkg/graph/size"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/size"
 )
 
 func sendRequest(
 	destName string,
 	size size.ByteSize,
 	extraHeader map[string]string,
-	requestHeader http.Header) (*http.Response, error) {
+	requestHeader http.Header,
+) (*http.Response, error) {
 	url := fmt.Sprintf("http://%s", destName)
 	request, err := buildRequest(url, size, extraHeader, requestHeader)
 	if err != nil {
@@ -40,7 +41,8 @@ func sendRequest(
 
 func buildRequest(
 	url string, size size.ByteSize, extraHeader map[string]string, requestHeader http.Header) (
-	*http.Request, error) {
+	*http.Request, error,
+) {
 	payload, err := makeRandomByteArray(size)
 	if err != nil {
 		return nil, err

@@ -18,11 +18,11 @@ import (
 	"encoding/json"
 	"sync"
 
-	"istio.io/tools/isotope/convert/pkg/graph/pct"
-	"istio.io/tools/isotope/convert/pkg/graph/script"
-	"istio.io/tools/isotope/convert/pkg/graph/size"
-	"istio.io/tools/isotope/convert/pkg/graph/svc"
-	"istio.io/tools/isotope/convert/pkg/graph/svctype"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/pct"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/script"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/size"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svc"
+	"github.com/daotl/istio-tools/isotope/convert/pkg/graph/svctype"
 )
 
 // UnmarshalJSON converts b into a valid ServiceGraph. See validate() for the
@@ -48,7 +48,8 @@ func (g *ServiceGraph) UnmarshalJSON(b []byte) (err error) {
 }
 
 func parseJSONServiceGraphWithDefaults(
-	b []byte, defaults defaults) (sg ServiceGraph, err error) {
+	b []byte, defaults defaults,
+) (sg ServiceGraph, err error) {
 	withGlobalDefaults(defaults, func() {
 		var unmarshallable unmarshallableServiceGraph
 		innerErr := json.Unmarshal(b, &unmarshallable)

@@ -1,5 +1,5 @@
 
-go_package = istio.io/tools/cmd/protoc-gen-golang-jsonshim/test/generated
+go_package = github.com/daotl/istio-tools/cmd/protoc-gen-golang-jsonshim/test/generated
 
 all: clean test
 

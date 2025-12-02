@@ -18,7 +18,7 @@ import (
 	"go/ast"
 	"go/token"
 
-	"istio.io/tools/pkg/checker"
+	"github.com/daotl/istio-tools/pkg/checker"
 )
 
 // NoOsEnv flags an error if os.Getenv or os.LookupEnv are used.
@@ -38,9 +38,11 @@ func (lr *NoOsEnv) GetID() string {
 func (lr *NoOsEnv) Check(aNode ast.Node, fs *token.FileSet, lrp *checker.Report) {
 	if ce, ok := aNode.(*ast.CallExpr); ok {
 		if MatchCallExpr(ce, "os", "Getenv") {
-			lrp.AddItem(fs.Position(ce.Pos()), lr.GetID(), "os.Getenv is disallowed, please see pkg/env instead")
+			lrp.AddItem(fs.Position(ce.Pos()), lr.GetID(),
+				"os.Getenv is disallowed, please see pkg/env instead")
 		} else if MatchCallExpr(ce, "os", "LookupEnv") {
-			lrp.AddItem(fs.Position(ce.Pos()), lr.GetID(), "os.LookupEnv is disallowed, please see pkg/env instead")
+			lrp.AddItem(fs.Position(ce.Pos()), lr.GetID(),
+				"os.LookupEnv is disallowed, please see pkg/env instead")
 		}
 	}
 }

@@ -30,8 +30,8 @@ import (
 	descriptor "google.golang.org/protobuf/types/descriptorpb"
 	plugin "google.golang.org/protobuf/types/pluginpb"
 
-	"istio.io/tools/pkg/markdown"
-	"istio.io/tools/pkg/protomodel"
+	"github.com/daotl/istio-tools/pkg/markdown"
+	"github.com/daotl/istio-tools/pkg/protomodel"
 )
 
 type outputMode int
@@ -92,7 +92,8 @@ func (g *htmlGenerator) getFileContents(file *protomodel.FileDescriptor,
 	*services = append(*services, file.Services...)
 
 	for _, m := range file.AllMessages {
-		g.includeUnsituatedDependencies(messages, enums, m, file.Matter.Mode == protomodel.ModePackage)
+		g.includeUnsituatedDependencies(messages, enums, m,
+			file.Matter.Mode == protomodel.ModePackage)
 	}
 }
 
@@ -169,10 +170,12 @@ func (g *htmlGenerator) generateOutput(filesToGen map[*protomodel.FileDescriptor
 			if mode == protomodel.ModeUnset {
 				// No mode set, we assume this file dictates the mode for the rest
 				mode = file.Matter.Mode
-			} else if mode == protomodel.ModeNone && file.Matter.Mode != protomodel.ModeUnset {
+			} else if mode == protomodel.ModeNone &&
+				file.Matter.Mode != protomodel.ModeUnset {
 				// Mode was already set to none, but we overrode it. This allows single files opting out
 				mode = file.Matter.Mode
-			} else if file.Matter.Mode != protomodel.ModeUnset && file.Matter.Mode != mode && file.Matter.Mode != protomodel.ModeNone {
+			} else if file.Matter.Mode != protomodel.ModeUnset &&
+				file.Matter.Mode != mode && file.Matter.Mode != protomodel.ModeNone {
 				return nil, fmt.Errorf("all files in a package must have the same mode; have %q got %q (in %v)", mode, file.Matter.Mode, *file.Name)
 			}
 		}
@@ -727,10 +730,12 @@ func (g *htmlGenerator) generateService(service *protomodel.ServiceDescriptor) {
 			}
 
 			if class != "" {
-				g.emit("<pre id=\"", normalizeID(g.relativeName(method)), "\" class=\"", class, "\"><code class=\"language-proto\">rpc ",
+				g.emit("<pre id=\"", normalizeID(g.relativeName(method)),
+					"\" class=\"", class, "\"><code class=\"language-proto\">rpc ",
 					method.GetName(), "(", g.relativeName(method.Input), ") returns (", g.relativeName(method.Output), ")")
 			} else {
-				g.emit("<pre id=\"", normalizeID(g.relativeName(method)), "\"><code class=\"language-proto\">rpc ",
+				g.emit("<pre id=\"", normalizeID(g.relativeName(method)),
+					"\"><code class=\"language-proto\">rpc ",
 					method.GetName(), "(", g.relativeName(method.Input), ") returns (", g.relativeName(method.Output), ")")
 			}
 			g.emit("</code></pre>")
@@ -981,7 +986,8 @@ func (g *htmlGenerator) linkify(o protomodel.CoreDesc, name string, onlyLastComp
 			loc = o.PackageDesc().FileDesc().Matter.HomeLocation
 		}
 
-		if loc != "" && (g.currentFrontMatterProvider == nil || loc != g.currentFrontMatterProvider.Matter.HomeLocation) {
+		if loc != "" && (g.currentFrontMatterProvider == nil ||
+			loc != g.currentFrontMatterProvider.Matter.HomeLocation) {
 			return "<a href=\"" + loc + "#" + normalizeID(protomodel.DottedName(o)) + "\">" + displayName + "</a>"
 		}
 	}
@@ -1028,16 +1034,20 @@ func (g *htmlGenerator) fieldTypeName(field *protomodel.FieldDescriptor) string 
 	case descriptor.FieldDescriptorProto_TYPE_FLOAT:
 		name = "float"
 
-	case descriptor.FieldDescriptorProto_TYPE_INT32, descriptor.FieldDescriptorProto_TYPE_SINT32, descriptor.FieldDescriptorProto_TYPE_SFIXED32:
+	case descriptor.FieldDescriptorProto_TYPE_INT32,
+		descriptor.FieldDescriptorProto_TYPE_SINT32, descriptor.FieldDescriptorProto_TYPE_SFIXED32:
 		name = "int32"
 
-	case descriptor.FieldDescriptorProto_TYPE_INT64, descriptor.FieldDescriptorProto_TYPE_SINT64, descriptor.FieldDescriptorProto_TYPE_SFIXED64:
+	case descriptor.FieldDescriptorProto_TYPE_INT64,
+		descriptor.FieldDescriptorProto_TYPE_SINT64, descriptor.FieldDescriptorProto_TYPE_SFIXED64:
 		name = "int64"
 
-	case descriptor.FieldDescriptorProto_TYPE_UINT64, descriptor.FieldDescriptorProto_TYPE_FIXED64:
+	case descriptor.FieldDescriptorProto_TYPE_UINT64,
+		descriptor.FieldDescriptorProto_TYPE_FIXED64:
 		name = "uint64"
 
-	case descriptor.FieldDescriptorProto_TYPE_UINT32, descriptor.FieldDescriptorProto_TYPE_FIXED32:
+	case descriptor.FieldDescriptorProto_TYPE_UINT32,
+		descriptor.FieldDescriptorProto_TYPE_FIXED32:
 		name = "uint32"
 
 	case descriptor.FieldDescriptorProto_TYPE_BOOL:

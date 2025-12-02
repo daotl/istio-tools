@@ -9,7 +9,7 @@ the types to be used with native Go JSON serialization.
 
 Add the executable to your system's PATH, for example:
 
-`$ go install istio.io/tools/cmd/protoc-gen-golang-jsonshim`
+`$ go install github.com/daotl/istio-tools/cmd/protoc-gen-golang-jsonshim`
 
 Add the `golang-jsonshim_out` option to your `protoc` command line, for example:
 

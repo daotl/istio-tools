@@ -19,8 +19,8 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	v1 "istio.io/tools/cmd/protoc-gen-alias/test/v1"
-	"istio.io/tools/cmd/protoc-gen-alias/test/v1alpha"
+	v1 "github.com/daotl/istio-tools/cmd/protoc-gen-alias/test/v1"
+	"github.com/daotl/istio-tools/cmd/protoc-gen-alias/test/v1alpha"
 )
 
 func TestSimpleCase(t *testing.T) {

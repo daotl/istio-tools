@@ -408,18 +408,18 @@ FROM binary_tools_context_base AS go_tools_2
 RUN --mount=type=cache,target=/tmp/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 go install -ldflags="-extldflags -static -s -w" \
-    istio.io/tools/cmd/protoc-gen-docs@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/protoc-gen-alias@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/annotations_prep@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/envvarlinter@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/testlinter@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/protoc-gen-golang-deepcopy@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/protoc-gen-golang-jsonshim@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/kubetype-gen@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/license-lint@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/gen-release-notes@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/org-gen@${ISTIO_TOOLS_SHA} \
-    istio.io/tools/cmd/protoc-gen-crd@${ISTIO_TOOLS_SHA}
+    github.com/daotl/istio-tools/cmd/protoc-gen-docs@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/protoc-gen-alias@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/annotations_prep@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/envvarlinter@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/testlinter@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/protoc-gen-golang-deepcopy@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/protoc-gen-golang-jsonshim@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/kubetype-gen@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/license-lint@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/gen-release-notes@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/org-gen@${ISTIO_TOOLS_SHA} \
+    github.com/daotl/istio-tools/cmd/protoc-gen-crd@${ISTIO_TOOLS_SHA}
 
 #############
 # Node.js

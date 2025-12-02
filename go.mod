@@ -1,6 +1,6 @@
-module istio.io/tools
+module github.com/daotl/istio-tools
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/client9/gospell v0.0.0-20160306015952-90dfc71015df

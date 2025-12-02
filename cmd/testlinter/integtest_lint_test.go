@@ -18,8 +18,8 @@ import (
 	"reflect"
 	"testing"
 
-	"istio.io/tools/cmd/testlinter/rules"
-	"istio.io/tools/pkg/checker"
+	"github.com/daotl/istio-tools/cmd/testlinter/rules"
+	"github.com/daotl/istio-tools/pkg/checker"
 )
 
 func TestIntegTestSkipByIssueRule(t *testing.T) {
@@ -28,7 +28,8 @@ func TestIntegTestSkipByIssueRule(t *testing.T) {
 
 	rpts, _ := getReport([]string{"testdata/"})
 	expectedRpts := []string{
-		getAbsPath("testdata/integration/integtest_test.go") + ":26:2:Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue. (skip_issue)",
+		getAbsPath("testdata/integration/integtest_test.go") +
+			":26:2:Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue. (skip_issue)",
 		getAbsPath("testdata/integtest_integ_test.go") + ":26:2:Only t.Skip() is allowed and t.Skip() should contain an url to GitHub issue. (skip_issue)",
 	}
 

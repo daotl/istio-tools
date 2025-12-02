@@ -19,8 +19,8 @@ package version
 import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	types "github.com/daotl/istio-tools/cmd/kubetype-gen/testdata/test_input/positive/types"
 	v1alpha1 "istio.io/api/meta/v1alpha1"
-	types "istio.io/tools/cmd/kubetype-gen/testdata/test_input/positive/types"
 )
 
 //

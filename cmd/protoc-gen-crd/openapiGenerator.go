@@ -40,7 +40,7 @@ import (
 	"sigs.k8s.io/controller-tools/pkg/markers"
 	"sigs.k8s.io/yaml"
 
-	"istio.io/tools/pkg/protomodel"
+	"github.com/daotl/istio-tools/pkg/protomodel"
 )
 
 // Some special types with predefined schemas.
@@ -189,7 +189,8 @@ func (g *openapiGenerator) getFileContents(
 	}
 	for _, v := range file.Matter.Extra {
 		if _, n, f := strings.Cut(v, "schema: "); f {
-			descriptions[n] = fmt.Sprintf("%v See more details at: %v", file.Matter.Description, file.Matter.HomeLocation)
+			descriptions[n] = fmt.Sprintf("%v See more details at: %v",
+				file.Matter.Description, file.Matter.HomeLocation)
 		}
 	}
 }
@@ -408,7 +409,9 @@ func (g *openapiGenerator) generateFile(
 						// Back compat
 						v = "istio.meta.v1alpha1.IstioStatus"
 					}
-					ver.Subresources = &apiext.CustomResourceSubresources{Status: &apiext.CustomResourceSubresourceStatus{}}
+					ver.Subresources = &apiext.CustomResourceSubresources{
+						Status: &apiext.CustomResourceSubresourceStatus{},
+					}
 					status, f := allSchemas[v]
 					if !f {
 						log.Fatalf("Schema %v not found", v)
@@ -424,7 +427,8 @@ func (g *openapiGenerator) generateFile(
 			}
 			if sr, f := cfg["spec"]; f {
 				if sr == "required" {
-					ver.Schema.OpenAPIV3Schema.Required = append(ver.Schema.OpenAPIV3Schema.Required, "spec")
+					ver.Schema.OpenAPIV3Schema.Required = append(
+						ver.Schema.OpenAPIV3Schema.Required, "spec")
 				}
 			}
 			if version == storageVersion {
@@ -462,7 +466,9 @@ func (g *openapiGenerator) generateFile(
 
 			crd.Spec.Versions = append(crd.Spec.Versions, ver)
 			crds[name] = crd
-			slices.SortFunc(crd.Spec.Versions, func(a, b apiext.CustomResourceDefinitionVersion) int {
+			slices.SortFunc(crd.Spec.Versions, func(
+				a, b apiext.CustomResourceDefinitionVersion,
+			) int {
 				if a.Name == b.Name {
 					log.Fatalf("%v has the version %v twice", name, a.Name)
 				}
@@ -569,7 +575,8 @@ func fixupYaml(y []byte) []byte {
 	y = bytes.ReplaceAll(y, []byte(statusOutput), []byte(""))
 	y = bytes.ReplaceAll(y, []byte(creationTimestampOutput), []byte(""))
 	// keep the quotes in the output which is required by helm.
-	y = bytes.ReplaceAll(y, []byte("helm.sh/resource-policy: keep"), []byte(`"helm.sh/resource-policy": keep`))
+	y = bytes.ReplaceAll(y, []byte("helm.sh/resource-policy: keep"),
+		[]byte(`"helm.sh/resource-policy": keep`))
 	return y
 }
 
@@ -579,7 +586,9 @@ func (g *openapiGenerator) generateMessage(message *protomodel.MessageDescriptor
 	}
 }
 
-func (g *openapiGenerator) generateCustomMessageSchema(message *protomodel.MessageDescriptor, customSchema *apiext.JSONSchemaProps) *apiext.JSONSchemaProps {
+func (g *openapiGenerator) generateCustomMessageSchema(message *protomodel.MessageDescriptor,
+	customSchema *apiext.JSONSchemaProps,
+) *apiext.JSONSchemaProps {
 	o := customSchema
 	o.Description = g.generateDescription(message)
 
@@ -637,11 +646,16 @@ func (g *openapiGenerator) generateMessageSchema(message *protomodel.MessageDesc
 		for _, field := range message.Fields {
 			// Record any oneOfs
 			if field.OneofIndex != nil {
-				oneOfs[*field.OneofIndex].OneOf = append(oneOfs[*field.OneofIndex].OneOf, apiext.JSONSchemaProps{Required: []string{g.fieldName(field)}})
+				oneOfs[*field.OneofIndex].OneOf = append(
+					oneOfs[*field.OneofIndex].OneOf, apiext.JSONSchemaProps{
+						Required: []string{g.fieldName(field)},
+					})
 			}
 		}
 		for i, oo := range oneOfs {
-			oo.OneOf = append([]apiext.JSONSchemaProps{{Not: &apiext.JSONSchemaProps{AnyOf: oo.OneOf}}}, oo.OneOf...)
+			oo.OneOf = append([]apiext.JSONSchemaProps{{
+				Not: &apiext.JSONSchemaProps{AnyOf: oo.OneOf},
+			}}, oo.OneOf...)
 			oneOfs[i] = oo
 		}
 		switch len(oneOfs) {
@@ -746,17 +760,20 @@ func (g *openapiGenerator) fieldType(field *protomodel.FieldDescriptor) *apiext.
 	schema := &apiext.JSONSchemaProps{}
 	var isMap bool
 	switch *field.Type {
-	case descriptor.FieldDescriptorProto_TYPE_FLOAT, descriptor.FieldDescriptorProto_TYPE_DOUBLE:
+	case descriptor.FieldDescriptorProto_TYPE_FLOAT,
+		descriptor.FieldDescriptorProto_TYPE_DOUBLE:
 		schema.Type = "number"
 		schema.Format = "double"
 		schema.Description = g.generateDescription(field)
 
-	case descriptor.FieldDescriptorProto_TYPE_INT32, descriptor.FieldDescriptorProto_TYPE_SINT32, descriptor.FieldDescriptorProto_TYPE_SFIXED32:
+	case descriptor.FieldDescriptorProto_TYPE_INT32,
+		descriptor.FieldDescriptorProto_TYPE_SINT32, descriptor.FieldDescriptorProto_TYPE_SFIXED32:
 		schema.Type = "integer"
 		schema.Format = "int32"
 		schema.Description = g.generateDescription(field)
 
-	case descriptor.FieldDescriptorProto_TYPE_INT64, descriptor.FieldDescriptorProto_TYPE_SINT64, descriptor.FieldDescriptorProto_TYPE_SFIXED64:
+	case descriptor.FieldDescriptorProto_TYPE_INT64,
+		descriptor.FieldDescriptorProto_TYPE_SINT64, descriptor.FieldDescriptorProto_TYPE_SFIXED64:
 		schema.Type = "integer"
 		schema.Format = "int64"
 		// TODO: ideally we could use a string here to avoid https://github.com/istio/api/issues/2818
@@ -764,7 +781,8 @@ func (g *openapiGenerator) fieldType(field *protomodel.FieldDescriptor) *apiext.
 		// schema.XIntOrString = true
 		schema.Description = g.generateDescription(field)
 
-	case descriptor.FieldDescriptorProto_TYPE_UINT64, descriptor.FieldDescriptorProto_TYPE_FIXED64:
+	case descriptor.FieldDescriptorProto_TYPE_UINT64,
+		descriptor.FieldDescriptorProto_TYPE_FIXED64:
 		schema.Type = "integer"
 		schema.Minimum = Ptr(float64(0))
 		// TODO: this overflows Kubernetes
@@ -774,7 +792,8 @@ func (g *openapiGenerator) fieldType(field *protomodel.FieldDescriptor) *apiext.
 		// schema.XIntOrString = true
 		schema.Description = g.generateDescription(field)
 
-	case descriptor.FieldDescriptorProto_TYPE_UINT32, descriptor.FieldDescriptorProto_TYPE_FIXED32:
+	case descriptor.FieldDescriptorProto_TYPE_UINT32,
+		descriptor.FieldDescriptorProto_TYPE_FIXED32:
 		schema.Type = "integer"
 		schema.Minimum = Ptr(float64(0))
 		schema.Maximum = Ptr(float64(math.MaxUint32))

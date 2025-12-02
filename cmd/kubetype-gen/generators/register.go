@@ -24,7 +24,7 @@ import (
 	"k8s.io/gengo/namer"
 	"k8s.io/gengo/types"
 
-	"istio.io/tools/cmd/kubetype-gen/metadata"
+	"github.com/daotl/istio-tools/cmd/kubetype-gen/metadata"
 )
 
 type registerGenerator struct {
@@ -59,7 +59,10 @@ func (g *registerGenerator) PackageVars(c *generator.Context) []string {
 	w := bufio.NewWriter(&schemeBuilder)
 	sw := generator.NewSnippetWriter(w, c, "$", "$")
 	m := map[string]interface{}{
-		"NewSchemeBuilder": c.Universe.Function(types.Name{Name: "NewSchemeBuilder", Package: "k8s.io/apimachinery/pkg/runtime"}),
+		"NewSchemeBuilder": c.Universe.Function(types.Name{
+			Name:    "NewSchemeBuilder",
+			Package: "k8s.io/apimachinery/pkg/runtime",
+		}),
 	}
 	sw.Do("SchemeBuilder      = $.NewSchemeBuilder|raw$(addKnownTypes)", m)
 	w.Flush()
@@ -86,9 +89,18 @@ func (g registerGenerator) Finalize(c *generator.Context, w io.Writer) error {
 		}
 	}
 	m := map[string]interface{}{
-		"GroupResource":            c.Universe.Type(types.Name{Name: "GroupResource", Package: "k8s.io/apimachinery/pkg/runtime/schema"}),
-		"Scheme":                   c.Universe.Type(types.Name{Name: "Scheme", Package: "k8s.io/apimachinery/pkg/runtime"}),
-		"AddToGroupVersion":        c.Universe.Function(types.Name{Name: "AddToGroupVersion", Package: "k8s.io/apimachinery/pkg/apis/meta/v1"}),
+		"GroupResource": c.Universe.Type(types.Name{
+			Name:    "GroupResource",
+			Package: "k8s.io/apimachinery/pkg/runtime/schema",
+		}),
+		"Scheme": c.Universe.Type(types.Name{
+			Name:    "Scheme",
+			Package: "k8s.io/apimachinery/pkg/runtime",
+		}),
+		"AddToGroupVersion": c.Universe.Function(types.Name{
+			Name:    "AddToGroupVersion",
+			Package: "k8s.io/apimachinery/pkg/apis/meta/v1",
+		}),
 		"CamelCaseSchemeKubeTypes": camelCaseSchemeKubeTypes,
 		"LowerCaseSchemeKubeTypes": lowerCaseSchemeKubeTypes,
 	}

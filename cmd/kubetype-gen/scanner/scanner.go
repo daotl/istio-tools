@@ -24,8 +24,8 @@ import (
 	"k8s.io/gengo/generator"
 	"k8s.io/gengo/types"
 
-	"istio.io/tools/cmd/kubetype-gen/generators"
-	"istio.io/tools/cmd/kubetype-gen/metadata"
+	"github.com/daotl/istio-tools/cmd/kubetype-gen/generators"
+	"github.com/daotl/istio-tools/cmd/kubetype-gen/metadata"
 )
 
 const (
@@ -158,7 +158,8 @@ func (s *Scanner) Scan(c *generator.Context, arguments *args.GeneratorArgs) gene
 			continue
 		}
 		glog.V(2).Infof("Adding package generator for %s.", source.GroupVersion())
-		generatorPackages = append(generatorPackages, generators.NewPackageGenerator(source, boilerplate))
+		generatorPackages = append(generatorPackages,
+			generators.NewPackageGenerator(source, boilerplate))
 	}
 	return generatorPackages
 }
@@ -200,7 +201,8 @@ func (s *Scanner) createKubeTypesForType(t *types.Type, outputPackage *types.Pac
 	newKubeTypes := make([]metadata.KubeType, 0, len(namesForType))
 	for _, name := range namesForType {
 		tags := s.getTagsForKubeType(t, name)
-		newKubeTypes = append(newKubeTypes, metadata.NewKubeType(t, s.context.Universe.Type(types.Name{Name: name, Package: outputPackage.Path}), tags))
+		newKubeTypes = append(newKubeTypes, metadata.NewKubeType(t,
+			s.context.Universe.Type(types.Name{Name: name, Package: outputPackage.Path}), tags))
 	}
 	return newKubeTypes
 }

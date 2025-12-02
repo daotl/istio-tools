@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package istio.tools.test;
 
-option go_package = "istio.io/tools/cmd/protoc-gen-alias/test/v1";
+option go_package = "github.com/daotl/istio-tools/cmd/protoc-gen-alias/test/v1";
 
 message ExternalSimple {
     uint32 fieldC = 1;

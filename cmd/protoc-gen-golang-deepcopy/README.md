@@ -10,7 +10,7 @@ instance to the `out` instance.  This allows the use of Kubernetes
 
 Add the executable to your system's PATH, for example:
 
-`$ go install istio.io/tools/cmd/protoc-gen-golang-deepcopy`
+`$ go install github.com/daotl/istio-tools/cmd/protoc-gen-golang-deepcopy`
 
 Add the `golang-deepcopy_out` option to your `protoc` command line, for example:
 
